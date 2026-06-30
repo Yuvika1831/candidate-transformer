@@ -1,66 +1,111 @@
-# Candidate Profile Merger (Node.js / Express)
+#candidate-transformer
+A Node.js + Express service that merges candidate data from two different sources — an ATS (Applicant Tracking System) record and a parsed resume — into a single, clean, validated candidate profile.
 
-This is a 1:1 conversion of the original Python project to Node.js + Express.
-All parsing, normalization, merging and validation logic, inputs, and outputs
-are kept identical to the Python version.
+Overview
 
-## Structure
+Recruiting pipelines often have candidate data scattered across multiple systems (an ATS entry and a raw resume, for example), and the same fields can conflict, be missing, or be formatted differently. This project:
 
-```
+
+Parses structured ATS data and unstructured resume text into a common format
+Merges both sources into one canonical profile, resolving conflicts with a clear priority rule
+Normalizes messy fields like phone numbers and skill names into consistent formats
+Attaches confidence scores and data provenance (which source each field came from) to every field
+Validates the final profile before it's considered "ready"
+Exposes everything through both a CLI and a REST API
+
+
+Features
+
+
+Dual-source parsing — separate parsers for ATS JSON and free-text resumes
+Conflict resolution — ATS data takes priority; resume data fills in the gaps
+Data normalization — phone numbers converted to E.164 format, skills mapped to canonical names (e.g. py → Python, js → JavaScript)
+Confidence scoring — each field gets a 0–1 confidence score based on how many sources agree
+Provenance tracking — every field records which source(s) it came from
+Validation layer — required fields, type checks, and numeric checks before output is accepted
+Configurable output shape — config.json controls which fields are projected into the final profile
+REST API — Express endpoints to run the full pipeline on demand
+CLI mode — run the same pipeline from the command line, writing results to disk
+
+
+Project Structure
+
 .
-├── config.json              # same field projection config
+├── config.json              # Controls which fields appear in the final output
 ├── input/
-│   ├── ats.json
-│   └── resume.txt
+│   ├── ats.json             # Sample ATS data
+│   └── resume.txt           # Sample resume text
 ├── output/
-│   └── result.json          # generated output
+│   └── result.json          # Generated merged profile
 ├── parsers/
-│   ├── atsParser.js         # port of parsers/ats_parser.py
-│   └── resumeParser.js      # port of parsers/resume_parser.py
+│   ├── atsParser.js         # Converts raw ATS JSON into a common profile shape
+│   └── resumeParser.js      # Extracts name, contact info, skills, etc. from resume text
 ├── normalizers/
-│   ├── phone.js              # port of normalizers/phone.py
-│   ├── skills.js              # port of normalizers/skills.py
-│   └── dates.js               # port of normalizers/dates.py
-├── merger.js                 # port of merger.py
-├── validator.js               # port of validator.py
-├── main.js                    # port of main.py (CLI entry point)
-├── server.js                  # new Express server wrapping the same logic
+│   ├── phone.js             # Normalizes phone numbers to E.164 format
+│   ├── skills.js             # Maps skill aliases to canonical names
+│   └── dates.js              # Normalizes date strings into a consistent format
+├── merger.js                 # Merges ATS + resume profiles, resolves conflicts, scores confidence
+├── validator.js               # Validates the final merged profile
+├── main.js                    # CLI entry point — runs the full pipeline end-to-end
+├── server.js                  # Express server exposing the pipeline as a REST API
 └── package.json
-```
 
-## Run as CLI (same behavior as `python main.py`)
+Getting Started
 
-```bash
-npm install
-npm run cli
-```
+Prerequisites
 
-This reads `input/ats.json` and `input/resume.txt`, merges/validates them,
-and writes `output/result.json` — exactly like the Python script.
 
-## Run as an Express API
+Node.js (v16 or higher recommended)
+npm
 
-```bash
-npm install
-npm start
-```
 
-Server starts on `http://localhost:3000` (override with `PORT` env var).
+Installation
 
-### Endpoints
+bashnpm install
 
-- `GET /api/profile` — runs the full pipeline (read → merge → project →
-  validate) and returns the merged profile as JSON. Returns HTTP 422 with
-  validation errors if validation fails.
-- `POST /api/profile/save` — same as above, but also writes
-  `output/result.json` to disk (equivalent to running the CLI).
-- `GET /health` — simple health check.
+Run as a CLI
 
-## Notes
+bashnpm run cli
 
-- All logic — field merging priority (ATS > Resume), email/phone/skill
-  normalization, confidence scoring, provenance tracking, and validation
-  rules — is preserved exactly from the Python implementation.
-- Output for the bundled sample input (`input/ats.json` + `input/resume.txt`)
-  is byte-for-byte equivalent (modulo `1` vs `1.0`, which are the same JSON
-  number) to the original Python output in `output/result.json`.
+Reads input/ats.json and input/resume.txt, merges and validates them, and writes the result to output/result.json.
+
+Run as an API server
+
+bashnpm start
+
+Server starts on http://localhost:3000 (override with the PORT environment variable).
+
+API Endpoints
+
+MethodEndpointDescriptionGET/api/profileRuns the full pipeline and returns the merged profile as JSON. Returns 422 with validation errors if the profile fails validation.POST/api/profile/saveSame as above, but also writes the result to output/result.json.GET/healthSimple health check endpoint.
+
+Example
+
+bashcurl http://localhost:3000/api/profile
+
+json{
+  "candidate_id": "C001",
+  "full_name": "Rahul Sharma",
+  "emails": ["rahul@gmail.com"],
+  "phones": ["+919876543210"],
+  "headline": "Software Engineer",
+  "years_experience": 4,
+  "skills": ["Docker", "Flask", "Git", "Python", "SQL"],
+  "confidence": { "full_name": 1, "emails": 1 },
+  "provenance": { "full_name": ["ATS", "Resume"] }
+}
+
+How Merging Works
+
+
+Field-level conflicts (name, headline, location, etc.) are resolved with ATS data taking priority over resume data.
+List fields (emails, phones, skills, education, work experience) are combined and de-duplicated across both sources.
+Phones and skills are passed through dedicated normalizers to produce consistent, canonical values.
+Confidence scores reflect how many sources contributed to a field — fields confirmed by both ATS and resume score highest.
+Provenance records exactly which source(s) supplied each field, useful for auditing and debugging.
+
+
+Tech Stack
+
+Node.js
+Express.js
