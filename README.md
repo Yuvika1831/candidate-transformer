@@ -1,4 +1,5 @@
-#candidate-transformer
+# candidate-transformer
+
 A Node.js + Express service that merges candidate data from two different sources — an ATS (Applicant Tracking System) record and a parsed resume — into a single, clean, validated candidate profile.
 
 Overview
