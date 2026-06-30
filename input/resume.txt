@@ -1,0 +1,25 @@
+Rahul Sharma
+
+Software Engineer
+
+Email : rahul@gmail.com
+
+Phone : +91 9876543210
+
+Location : Delhi
+
+Experience : 4 years
+
+Skills
+
+Python
+SQL
+Docker
+Flask
+Git
+
+LinkedIn
+https://linkedin.com/in/rahul
+
+GitHub
+https://github.com/rahul

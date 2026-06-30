@@ -1,0 +1,97 @@
+{
+    "candidate_id": "C001",
+    "full_name": "Rahul Sharma",
+    "emails": [
+        "rahul@gmail.com"
+    ],
+    "phones": [
+        "+919876543210"
+    ],
+    "headline": "Software Engineer",
+    "years_experience": 4,
+    "skills": [
+        "Docker",
+        "Flask",
+        "Git",
+        "Python",
+        "SQL"
+    ],
+    "education": [
+        {
+            "degree": "B.Tech",
+            "college": "ABC University",
+            "year": 2022
+        }
+    ],
+    "work_experience": [
+        {
+            "company": "Infosys",
+            "designation": "Software Engineer",
+            "years": 4
+        }
+    ],
+    "location": "Delhi",
+    "linkedin": "https://linkedin.com/in/rahul",
+    "github": "https://github.com/rahul",
+    "confidence": {
+        "candidate_id": 0.95,
+        "full_name": 1,
+        "emails": 1,
+        "phones": 1,
+        "headline": 1,
+        "years_experience": 1,
+        "skills": 1,
+        "education": 0.95,
+        "work_experience": 0.95,
+        "location": 1,
+        "linkedin": 1,
+        "github": 1
+    },
+    "provenance": {
+        "candidate_id": [
+            "ATS"
+        ],
+        "full_name": [
+            "ATS",
+            "Resume"
+        ],
+        "emails": [
+            "ATS",
+            "Resume"
+        ],
+        "phones": [
+            "ATS",
+            "Resume"
+        ],
+        "headline": [
+            "ATS",
+            "Resume"
+        ],
+        "years_experience": [
+            "ATS",
+            "Resume"
+        ],
+        "skills": [
+            "ATS",
+            "Resume"
+        ],
+        "education": [
+            "ATS"
+        ],
+        "work_experience": [
+            "ATS"
+        ],
+        "location": [
+            "ATS",
+            "Resume"
+        ],
+        "linkedin": [
+            "ATS",
+            "Resume"
+        ],
+        "github": [
+            "ATS",
+            "Resume"
+        ]
+    }
+}

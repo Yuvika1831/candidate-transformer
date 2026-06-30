@@ -1,0 +1,35 @@
+{
+    "candidate_id": "C001",
+    "name": "Rahul Sharma",
+    "email": "rahul@gmail.com",
+    "phone": "9876543210",
+    "title": "Software Engineer",
+    "experience": 4,
+    "location": "Delhi",
+
+    "skills": [
+        "Python",
+        "SQL",
+        "Docker"
+    ],
+
+    "education": [
+        {
+            "degree": "B.Tech",
+            "college": "ABC University",
+            "year": 2022
+        }
+    ],
+
+    "work_experience": [
+        {
+            "company": "Infosys",
+            "designation": "Software Engineer",
+            "years": 4
+        }
+    ],
+
+    "linkedin": "https://linkedin.com/in/rahul",
+
+    "github": "https://github.com/rahul"
+}
